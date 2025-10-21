@@ -1,0 +1,12 @@
+replicaCount: 2
+
+image:
+  repository: your-docker-repo/helix
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources: {}
