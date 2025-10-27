@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        KUBECONFIG = credentials('kubeconfig-cred') // Jenkins credential for kubeconfig
+        // Optional: If you want to use KUBECONFIG directly
+        KUBECONFIG = credentials('kubeconfig-cred')
     }
     stages {
         stage('Checkout') {
@@ -19,11 +20,14 @@ pipeline {
         }
         stage('Deploy with Helm') {
             steps {
-                sh '''
-                helm repo add jenkins https://charts.jenkins.io
-                helm repo update
-                helm upgrade --install jenkins jenkins/jenkins --namespace jenkins --create-namespace -f values.yaml
-                '''
+                withKubeConfig([credentialsId: 'kubeconfig-cred']) {
+                    sh '''
+                    helm repo add jenkins https://charts.jenkins.io
+                    helm repo update
+                    helm upgrade --install jenkins jenkins/jenkins --namespace jenkins --create-namespace -f values.yaml
+                    kubectl get pods -n jenkins
+                    '''
+                }
             }
         }
     }
