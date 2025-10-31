@@ -1,7 +1,7 @@
 replicaCount: 2
 
 image:
-  repository: your-docker-repo/helix
+  repository: rangakrish/helix
   tag: latest
   pullPolicy: IfNotPresent
 
